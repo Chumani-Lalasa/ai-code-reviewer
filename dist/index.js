@@ -31483,20 +31483,26 @@ function getGeminiModel() {
   // LEARN: gemini-1.5-flash is fast and cheap, ideal for automation.
   // gemini-1.5-pro is more capable but slower and more expensive.
   // For code review running on every PR, flash is the right choice.
-  return genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    generationConfig: {
-      // LEARN: temperature controls randomness.
-      // 0.0 = fully deterministic (same input → same output, good for code analysis)
-      // 1.0 = very creative/random (good for creative writing)
-      // For code review we want consistent, analytical responses → low temperature
-      temperature: 0.2,
+  // LEARN: The second argument { apiVersion: 'v1' } forces the SDK to use
+  // the stable v1 endpoint instead of the default v1beta. Google has been
+  // deprecating models on v1beta, so explicitly using v1 is more future-proof.
+  return genAI.getGenerativeModel(
+    {
+      model: 'gemini-1.5-flash',
+      generationConfig: {
+        // LEARN: temperature controls randomness.
+        // 0.0 = fully deterministic (same input → same output, good for code analysis)
+        // 1.0 = very creative/random (good for creative writing)
+        // For code review we want consistent, analytical responses → low temperature
+        temperature: 0.2,
 
-      // LEARN: maxOutputTokens caps the response length.
-      // 1 token ≈ 4 characters. 2048 tokens ≈ ~8000 chars of review text.
-      maxOutputTokens: 2048,
+        // LEARN: maxOutputTokens caps the response length.
+        // 1 token ≈ 4 characters. 2048 tokens ≈ ~8000 chars of review text.
+        maxOutputTokens: 2048,
+      },
     },
-  });
+    { apiVersion: 'v1' }
+  );
 }
 
 /**
