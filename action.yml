@@ -18,6 +18,10 @@ inputs:
   gemini-api-key:
     description: 'Your Google Gemini API key. Store this as a GitHub Secret (never hardcode it).'
     required: true
+  model:
+    description: 'Gemini model to use for code review.'
+    required: false
+    default: 'gemini-2.5-flash'
 
 # LEARN: outputs let other steps in the same workflow job read values
 # from this step using ${{ steps.<step-id>.outputs.score }}

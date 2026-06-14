@@ -18,12 +18,18 @@ function getGeminiModel() {
   // LEARN: gemini-1.5-flash is fast and cheap, ideal for automation.
   // gemini-1.5-pro is more capable but slower and more expensive.
   // For code review running on every PR, flash is the right choice.
+  // LEARN: Reading the model name from core.getInput() means any user of this
+  // action can override it via the 'model' input in their workflow YAML.
+  // Falling back to 'gemini-2.5-flash' gives a sensible default on the free tier.
+  const modelName = core.getInput('model') || 'gemini-2.5-flash';
+  core.info(`Using Gemini model: ${modelName}`);
+
   // LEARN: The second argument { apiVersion: 'v1' } forces the SDK to use
   // the stable v1 endpoint instead of the default v1beta. Google has been
   // deprecating models on v1beta, so explicitly using v1 is more future-proof.
   return genAI.getGenerativeModel(
     {
-      model: 'gemini-1.5-flash',
+      model: modelName,
       generationConfig: {
         // LEARN: temperature controls randomness.
         // 0.0 = fully deterministic (same input → same output, good for code analysis)
