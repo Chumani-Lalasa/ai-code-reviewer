@@ -1,4 +1,4 @@
-# 🤖 AI Code Reviewer
+# 🤖 AI Code Reviewer - This will generate the review for all your PR's and commits
 
 > A GitHub Action that automatically reviews pull requests using **Google Gemini AI** and posts structured, actionable feedback as a PR comment.
 
