@@ -31419,7 +31419,7 @@ function getGeminiModel() {
   // gemini-1.5-pro is more capable but slower and more expensive.
   // For code review running on every PR, flash is the right choice.
   return genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-2.0-flash',
     generationConfig: {
       // LEARN: temperature controls randomness.
       // 0.0 = fully deterministic (same input → same output, good for code analysis)
