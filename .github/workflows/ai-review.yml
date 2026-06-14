@@ -1,0 +1,44 @@
+# LEARN: This is the workflow file. It lives in .github/workflows/ of THIS repo,
+# meaning the action runs on its OWN pull requests (dogfooding — using your own tool).
+#
+# Users who want to USE this action in their own repo just copy this file
+# and change the 'uses' line to point to your action.
+
+name: AI Code Review
+
+# LEARN: 'on' defines what events trigger this workflow.
+# pull_request fires when a PR is opened OR when new commits are pushed to it.
+# 'synchronize' = new commits pushed to an existing PR.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    name: Review PR with Gemini AI
+    runs-on: ubuntu-latest  # LEARN: GitHub spins up a fresh Ubuntu VM for every run
+
+    # LEARN: 'permissions' is the principle of least privilege.
+    # We only grant the permissions this job actually needs.
+    # pull-requests: write → allows posting comments on the PR
+    # contents: read → allows reading the repo code/diff
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: AI Code Review
+        # LEARN: 'uses' references a GitHub Action by owner/repo@version.
+        # Using @v1 (a tag) instead of @main means your workflow won't break
+        # if the action author pushes a breaking change to main.
+        uses: Chumani-Lalasa/ai-code-reviewer@v1
+        with:
+          # LEARN: ${{ secrets.GEMINI_API_KEY }} reads from your repo's
+          # Settings → Secrets → Actions. The value is encrypted and
+          # never visible in logs.
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+        env:
+          # LEARN: GITHUB_TOKEN is automatically created by GitHub for every
+          # workflow run. It expires when the workflow finishes.
+          # You don't need to create this secret — GitHub provides it.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

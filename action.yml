@@ -1,0 +1,35 @@
+# LEARN: action.yml is the metadata file that makes this repo a GitHub Action.
+# GitHub reads this file to know:
+# - What the action is called and does (name, description)
+# - What inputs it accepts (inputs)
+# - What outputs it produces (outputs)
+# - How to run it (runs)
+
+name: 'AI Code Reviewer'
+description: 'Automatically reviews pull requests using Google Gemini AI and posts structured feedback as a PR comment.'
+author: 'Chumani Lalasa'
+
+branding:
+  # These appear on the GitHub Marketplace listing
+  icon: 'code'
+  color: 'blue'
+
+inputs:
+  gemini-api-key:
+    description: 'Your Google Gemini API key. Store this as a GitHub Secret (never hardcode it).'
+    required: true
+
+# LEARN: outputs let other steps in the same workflow job read values
+# from this step using ${{ steps.<step-id>.outputs.score }}
+outputs:
+  score:
+    description: 'The overall quality score (1-10) assigned by the AI reviewer'
+  issues_count:
+    description: 'Number of issues found in the PR'
+
+runs:
+  # LEARN: 'using: node20' tells GitHub to run this action with Node.js 20.
+  # 'main: dist/index.js' points to our bundled file (not src/index.js).
+  # This is why bundling is required — the VM runs dist/index.js directly.
+  using: 'node20'
+  main: 'dist/index.js'
